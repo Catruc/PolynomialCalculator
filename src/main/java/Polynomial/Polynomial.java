@@ -41,8 +41,7 @@ public class Polynomial {
         do {
             String coefficientString = matcher.group(1);  /// the coefficient of the monomial
             double coefficient = coefficientString.isEmpty() ? 1.0 : Double.parseDouble(coefficientString);  /// if the coefficient is empty, the coefficient is 1 else the coefficient is the coefficient of the monomial
-            String powerString = matcher.group(2);  /// the power of the monomial
-            int power = powerString.isEmpty() ? 0 : Integer.parseInt(powerString);  /// if the power is empty, the power is 0 else the power is the power of the monomial
+            int power = Integer.parseInt(matcher.group(2));  /// the power of the monomial
             Monomial monomial = new Monomial(power, coefficient);  /// a new monomial is created
             polynomial.addMonomial(monomial);  /// the monomial is added to the polynomial
         } while (matcher.find()); /// the monomial is added to the polynomial until there are no more monomials
@@ -50,12 +49,11 @@ public class Polynomial {
         return polynomial;  /// the polynomial is returned
     }
 
+
+
     public HashMap<Integer, Monomial> getPolynomial() {
         return polynomial;
     }
-
-
-
 
 
     public int getDegree() {  /// method for getting the degree of the polynomial
