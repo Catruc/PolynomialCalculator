@@ -1,16 +1,25 @@
 package GUI;
 
+import Operations.ProceedOperations;
+import Polynomial.Monomial;
+import Polynomial.Polynomial;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
+
+import static Polynomial.Polynomial.*;
+
+import Polynomial.Monomial;
+import Polynomial.Polynomial;
 
 public class Calculator {
 
     JTextField selectedTextField = null;
 
-    public void calculatorInterface() {
+    public void calculatorUserInterface() {
 
         /// JFrame
 
@@ -27,14 +36,14 @@ public class Calculator {
         firstPolynomialText.setBounds(180, 40, 600, 30);  /// size and coordinates for the firstPolynomial
         secondPolynomialText.setBounds(180, 90, 600, 30); /// size and coordinates for the secondPolynomial
         resultText.setBounds(180, 140, 600, 30);   /// size and coordinates for the resultText
-        resultText.setEditable(false);     /// resultText cannot be edited
+        resultText.setEditable(true);     /// resultText cannot be edited
 
         /// JLabel
 
         JLabel firstPolynomialTitle = new JLabel("FIRST POLYNOMIAL:");  /// a label to show the user where to write th first Polynomial
         JLabel secondPolynomialTitle = new JLabel("SECOND POLYNOMIAL:");  /// a label to show the user where to write th second Polynomial
         JLabel resultTitle = new JLabel("RESULT:");    /// a label to show where the result is printed
-        firstPolynomialTitle.setBounds(50, 30, 190, 50);    /// size and coordinates for the firstPolynomialTitle Label
+        firstPolynomialTitle.setBounds(50, 30, 170, 50);    /// size and coordinates for the firstPolynomialTitle Label
         secondPolynomialTitle.setBounds(30, 80, 190, 50);   /// size and coordinates for the secondPolynomialTitle Label
         resultTitle.setBounds(75, 130, 190, 50);         /// size and coordinates for the resultTitle Label
 
@@ -56,6 +65,14 @@ public class Calculator {
         JButton powerButton = new JButton("^");  /// a button for ^ sign
         JButton xButton = new JButton("x");  /// a button for x sign
         JButton deleteButton = new JButton("del");  /// a button for deleting a character
+        JButton multiplyButton = new JButton("*");  /// a button for * sign
+        JButton additionButton = new JButton("ADDITION"); /// a button for addition operation
+        JButton substractionButton = new JButton("SUBSTRACTION"); /// a button for substraction
+        JButton multiplicationButton = new JButton("MULTIPLICATION"); /// a button for multiplication
+        JButton divisionButton = new JButton("DIVISION"); /// a button for division
+        JButton derivationButton = new JButton("DERIVATION"); /// a button for derivation
+        JButton integrationButton = new JButton("INTEGRATION"); /// a button for integration
+
         digit0.setBounds(120, 490, 70, 50);  /// size and coordinates for the digit0 Button
         digit1.setBounds(20, 280, 70, 50);  /// size and coordinates for the digit1 Button
         digit2.setBounds(120, 280, 70, 50);  /// size and coordinates for the digit2 Button
@@ -67,16 +84,40 @@ public class Calculator {
         digit8.setBounds(120, 420, 70, 50);  /// size and coordinates for the digit8 Button
         digit9.setBounds(220, 420, 70, 50);  /// size and coordinates for the digit9 Button
 
-        plusButton.setBounds(400,280,70,50);  /// size and coordinates for the plus Button
-        minusButton.setBounds(400,350,70,50);  /// size and coordinates for the minus Button
-        powerButton.setBounds(400,420,70,50);  /// size and coordinates for the power Button
-        xButton.setBounds(20,490,70,50);     /// size and coordinates for the power Button
-        deleteButton.setBounds(220,490,70,50);  /// size and coordinates for the delete Button
+        plusButton.setBounds(325, 280, 70, 50);  /// size and coordinates for the plus Button
+        minusButton.setBounds(325, 350, 70, 50);  /// size and coordinates for the minus Button
+        powerButton.setBounds(325, 420, 70, 50);  /// size and coordinates for the power Button
+        xButton.setBounds(20, 490, 70, 50);     /// size and coordinates for the power Button
+        deleteButton.setBounds(220, 490, 70, 50);  /// size and coordinates for the delete Button
+        multiplyButton.setBounds(325, 490, 70, 50);  /// size and coordinates for the * Button
+        additionButton.setBounds(425, 310, 140, 50);  /// size and coordinates for the addition Button
+        substractionButton.setBounds(600, 310, 140, 50); /// size and coordinates for the substraction Button
+        multiplicationButton.setBounds(425, 385, 140, 50);  /// size and coordinates for the multiplication Button
+        divisionButton.setBounds(600, 385, 140, 50); /// size and coordinates for the division Button
+        derivationButton.setBounds(425, 460, 140, 50);  /// size and coordinates for the derivation Button
+        integrationButton.setBounds(600, 460, 140, 50); /// size and coordinates for the integration Button
+
+        /// JComboBox
+
+        JCheckBox firstPolynomialCheckBox = new JCheckBox();   /// a checkbox to choose the first polynomial
+        JCheckBox secondPolynomialCheckBox = new JCheckBox();  /// a checkbox to choose the second polynomial
+
+        firstPolynomialCheckBox.setBounds(5, 30, 20, 50);  /// size and coordinates for the firstPolynomialCheckBox
+        secondPolynomialCheckBox.setBounds(5, 80, 20, 50);  /// size and coordinates for the secondPolynomialCheckBox
 
 
         /// adding to the frame
 
-        calculatorFrame.add(deleteButton);  /// delete Button added tot the frame
+        calculatorFrame.add(secondPolynomialCheckBox);  /// secondPolynomialCheckBox added to the frame
+        calculatorFrame.add(firstPolynomialCheckBox);  /// firstPolynomialCheckBox added to the frame
+        calculatorFrame.add(integrationButton);   /// integration Button added to the frame
+        calculatorFrame.add(derivationButton);    /// derivation Button added to the frame
+        calculatorFrame.add(multiplicationButton);   /// multiplication Button added to the frame
+        calculatorFrame.add(divisionButton);    /// division Button added to the frame
+        calculatorFrame.add(substractionButton);  /// substraction Button added to the frame
+        calculatorFrame.add(additionButton);   /// addition Button added to the frame
+        calculatorFrame.add(multiplyButton);  /// multiply Button added to the frame
+        calculatorFrame.add(deleteButton);  /// delete Button added to the frame
         calculatorFrame.add(xButton);  /// x Button added to the frame
         calculatorFrame.add(plusButton);  /// plus Button added to the frame
         calculatorFrame.add(minusButton);  /// minus Button added to the frame
@@ -305,6 +346,124 @@ public class Calculator {
                         selectedTextField.setCaretPosition(caretPosition - 1);    /// then we modify the caret position
                     }
                 }
+            }
+        });
+
+
+        multiplyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedTextField == firstPolynomialText) {
+                    firstPolynomialText.setText(firstPolynomialText.getText() + "*");
+                } else if (selectedTextField == secondPolynomialText) {
+                    secondPolynomialText.setText(secondPolynomialText.getText() + "*");
+                }
+            }
+        });
+
+
+        additionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String firstPolynomial = firstPolynomialText.getText();
+                String secondPolynomial = secondPolynomialText.getText();
+                Polynomial pol1 = formPolynomial(firstPolynomial);
+                Polynomial pol2 = formPolynomial(secondPolynomial);
+                ProceedOperations proceedOperations = new ProceedOperations();
+                Polynomial res = proceedOperations.add(pol1, pol2);
+                resultText.setText(res.toString());
+            }
+        });
+
+
+        substractionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String firstPolynomial = firstPolynomialText.getText();
+                String secondPolynomial = secondPolynomialText.getText();
+                Polynomial pol1 = formPolynomial(firstPolynomial);
+                Polynomial pol2 = formPolynomial(secondPolynomial);
+                ProceedOperations proceedOperations = new ProceedOperations();
+                Polynomial res = proceedOperations.substract(pol1, pol2);
+                resultText.setText(res.toString());
+            }
+        });
+
+
+        multiplicationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String firstPolynomial = firstPolynomialText.getText();
+                String secondPolynomial = secondPolynomialText.getText();
+                Polynomial pol1 = formPolynomial(firstPolynomial);
+                Polynomial pol2 = formPolynomial(secondPolynomial);
+                ProceedOperations proceedOperations = new ProceedOperations();
+                Polynomial res = proceedOperations.multiply(pol1, pol2);
+                resultText.setText(res.toString());
+            }
+        });
+
+
+        derivationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!firstPolynomialCheckBox.isSelected() && !secondPolynomialCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Select a polynomial");
+                } else if (firstPolynomialCheckBox.isSelected() && !secondPolynomialCheckBox.isSelected()) {
+                    String firstPolynomial = firstPolynomialText.getText();
+                    Polynomial pol1 = formPolynomial(firstPolynomial);
+                    ProceedOperations proceedOperations = new ProceedOperations();
+                    Polynomial res = proceedOperations.derivative(pol1);
+                    resultText.setText(res.toString());
+                } else if (!firstPolynomialCheckBox.isSelected() && secondPolynomialCheckBox.isSelected()) {
+                    String secondPolynomial = secondPolynomialText.getText();
+                    Polynomial pol2 = formPolynomial(secondPolynomial);
+                    ProceedOperations proceedOperations = new ProceedOperations();
+                    Polynomial res = proceedOperations.derivative(pol2);
+                    resultText.setText(res.toString());
+                } else if (firstPolynomialCheckBox.isSelected() && secondPolynomialCheckBox.isSelected()) {
+                    System.out.println("Select only one polynomial");
+                }
+
+            }
+        });
+
+
+        integrationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!firstPolynomialCheckBox.isSelected() && !secondPolynomialCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Select a polynomial");
+                } else if (firstPolynomialCheckBox.isSelected() && !secondPolynomialCheckBox.isSelected()) {
+                    String firstPolynomial = firstPolynomialText.getText();
+                    Polynomial pol1 = formPolynomial(firstPolynomial);
+                    ProceedOperations proceedOperations = new ProceedOperations();
+                    Polynomial res = proceedOperations.integration(pol1);
+                    resultText.setText(res.toString() + " + C");
+                } else if (!firstPolynomialCheckBox.isSelected() && secondPolynomialCheckBox.isSelected()) {
+                    String secondPolynomial = secondPolynomialText.getText();
+                    Polynomial pol2 = formPolynomial(secondPolynomial);
+                    ProceedOperations proceedOperations = new ProceedOperations();
+                    Polynomial res = proceedOperations.integration(pol2);
+                    resultText.setText(res.toString() + " + C");
+                } else if (firstPolynomialCheckBox.isSelected() && secondPolynomialCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Select only one polynomial");
+                }
+
+            }
+        });
+
+
+        divisionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String firstPolynomial = firstPolynomialText.getText();
+                String secondPolynomial = secondPolynomialText.getText();
+                Polynomial pol1 = formPolynomial(firstPolynomial);
+                Polynomial pol2 = formPolynomial(secondPolynomial);
+                ProceedOperations proceedOperations = new ProceedOperations();
+                ArrayList<Polynomial> result = proceedOperations.dividePolynomials(pol1, pol2);
+                resultText.setText(result.get(0).toString() + "|||" + result.get(1).toString());
             }
         });
 

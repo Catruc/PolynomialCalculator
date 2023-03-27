@@ -1,11 +1,15 @@
 package org.example;
 
 import GUI.Calculator;
-public class App 
-{
-    public static void main( String[] args )
-    {
+import Polynomial.Monomial;
+import Polynomial.Polynomial;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class App {
+    public static void main(String[] args) {
         Calculator calculator = new Calculator();
-        calculator.calculatorInterface();
+        calculator.calculatorUserInterface();
     }
 }
