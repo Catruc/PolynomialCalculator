@@ -33,7 +33,7 @@ public class Polynomial {
 
     public static Polynomial formPolynomial(String polynomialInput) throws IllegalArgumentException {  /// method for creating a polynomial from a string
         Polynomial polynomial = new Polynomial();  /// a new polynomial is created
-        Pattern termPattern = Pattern.compile("([-+]?[0-9]*\\.?[0-9]*)\\*?x\\^([0-9]+)"); /// the pattern for the monomial
+        Pattern termPattern = Pattern.compile("([-+]?[0-9]*\\.?[0-9]*)\\*?x\\^?([0-9]+)?"); /// the pattern for the monomial
         Matcher matcher = termPattern.matcher(polynomialInput);  /// the matcher for the monomial
         if (!matcher.find()) {  /// if the polynomial is not in the correct format
             JOptionPane.showMessageDialog(null, "Invalid polynomial format!");  /// an error message is displayed
@@ -41,14 +41,16 @@ public class Polynomial {
         do {
             String coefficientString = matcher.group(1);  /// the coefficient of the monomial
             double coefficient = coefficientString.isEmpty() ? 1.0 : Double.parseDouble(coefficientString);  /// if the coefficient is empty, the coefficient is 1 else the coefficient is the coefficient of the monomial
-            int power = Integer.parseInt(matcher.group(2));  /// the power of the monomial
+            String powerString = matcher.group(2);  /// the power of the monomial
+            int power = (powerString == null || powerString.isEmpty()) ? 1 : Integer.parseInt(powerString);
+            //int power = Integer.parseInt(matcher.group(2));  /// the power of the monomial
             Monomial monomial = new Monomial(power, coefficient);  /// a new monomial is created
             polynomial.addMonomial(monomial);  /// the monomial is added to the polynomial
+
         } while (matcher.find()); /// the monomial is added to the polynomial until there are no more monomials
 
         return polynomial;  /// the polynomial is returned
     }
-
 
 
     public HashMap<Integer, Monomial> getPolynomial() {
